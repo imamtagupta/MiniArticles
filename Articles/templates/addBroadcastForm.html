@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<form class="col-lg-8" method="POST" action="{% url 'broadcastingMessageForm' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="broadcastTitle">Broadcast Title</label>
+        {{ form.title }}
+    </div>
+    <div class="form-group">
+        <label for="broadcastDesc">Broadcast Description</label>
+        {{ form.description }}
+    </div>
+    <div class="form-group">
+        <label for="broadcastDesc">Image</label>
+        {{ form.image }}
+    </div>
+    <div class="form-group">
+        <label for="broadcastVideo">Video</label>
+        {{ form.video }}
+    </div>
+    <div class="form-group">
+        <label for="broadcastYoutubeVideo">Video</label>
+        {{ form.ytvideo }}
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock content %}
