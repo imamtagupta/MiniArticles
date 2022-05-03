@@ -1,44 +1,120 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block content %}
-
-<div class="card-columns"></div>
+    {% load static %}
+    {% block content %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+        .message-container{
+            padding-top: 1vw;
+            width: 800px;
+            margin: 0 auto;
+            font-family: 'Roboto', sans-serif;
+        }
+        .messageBox{
+            margin-bottom: 2vw;
+        }
+        .msg-img, .msg-video{
+            margin: 5px 0;
+            width: 600px;
+            border-radius: 2rem;
+        }
+        .msg-title{
+            margin: 5px 0;
+            color: #333;
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 24px;
+            text-transform: capitalize;
+        }
+        .msg-text
+        {
+            margin: 5px 0;
+            font-weight: 500;
+            color: #999;
+            font-size: 15px;
+            line-height: 22px;
+            font-stretch: expanded;
+        }
+        .profile{
+            margin: 8px 0;
+        }
+        .msg-username,
+        .update-time{
+            display: flex;
+            font-weight: 600;
+            color: #0000b6b5;
+            font-size: 15px;
+            line-height: 22px;
+            font-stretch: expanded;
+            margin-bottom: 0;
+        }
+        .update-time{
+            font-style: italic;
+            color: #1376ee86;
+        }
+        .add-post{
+            font-size: 16px;
+            font-weight: bolder;
+            padding: 7px 15px;
+            border-radius: 5px;
+            margin: 0 0 20px;
+            background-color: #0000ee19;
+            color: #0000ee;
+            width: fit-content; 
+        }
+        .add-post:hover{
+            color: #fff;
+            background-color: #0000ee;
+        }
+        .breakline{
+            width: 100%;
+            height: 2px;
+            background: #dde;
+            margin-bottom: 5px;
+        }
+    </style>
     {%for group in Groups %}
-
-        <div class="box container">
-            <!-- <h5 class="card-title">{{ group.name}}</h5> -->
-            <div class="w-80 mx-auto brodcast-container p-5">
-            {% for cast in Broadcast %}
-            {% if cast.broadcastgroup_id == group.id %}
-                <div class="card rounded card-message">
-                    <div class="d-flex">
-                        <div class="profile-img">
-                            <img src="media/images/smiley.png" width="30px" height="30px"><small><strong>USERNAME</strong></small>
-                        </div>
-                    </div>
-                    {% if cast.image != '' %}
-                        <img class="rounded-img" src="media/{{cast.image}}" width="100%" height="100%">
-                    {% elif cast.video != '' %}
-                        <video class="card-img rounded-img" height="250px" width="250px" controls>
-                            <source src="media/{{cast.video}}" type="video/mp4">
-                            <source src="media/{{cast.video}}" type="video/ogg">
-                            <source src="media/{{cast.video}}" type="video/webm">
-                        </video>
-                    {% elif cast.ytvideo %}
-                        <iframe class="rounded-img" width="560" height="315" src="{{ cast.ytvideo }}"></iframe>
-                    {% endif %}
-                    <h5 class="card-title">{{ cast.title }}</h5>
-                    <p class="card-text">{{ cast.description }}</p>
-                </div>
-                <br>
+    <div class="message-container">
+        <a class="btn add-post" href="{% url 'broadcastingMessageForm' %}">
+            Add Post
+        </a>
+        {% for cast in Broadcast %}
+        {% if cast.broadcastgroup_id == group.id %}
+        <div class="messageBox">
+            <h5 class="msg-title">{{ cast.title }}</h5>
+                {% if cast.image != '' %}
+                <img class="msg-img" src="/media/{{cast.image}}" width="100%" height="100%" loading="lazy">
+                {% elif cast.ytvideo %}
+                <iframe class="msg-video" width="560" height="315" src="{{ cast.ytvideo }}" loading="lazy"></iframe>
+                {% elif cast.video != '' %}
+                <video class="msg-video" height="250px" width="250px" controls>
+                    <source src="/media/{{cast.video}}" type="video/mp4">
+                    <source src="/media/{{cast.video}}" type="video/ogg">
+                    <source src="/media/{{cast.video}}" type="video/webm">
+                </video>
                 {% endif %}
-                {% endfor %}
+            <p class="msg-text">{{ cast.description }}</p>
+            <div class="profile">
+                <section class="msg-username">
+                    <span><i class="fa fa-user pr" aria-hidden="true"></i></span>
+                    <p class="px-2 mb-1">{{ cast.added_by_username }}</p>
+                </section>
+                <section class="update-time">Updated on: {{ cast.date_added }}
+                </section>
             </div>
+            <div class="breakline"></div>
         </div>
-        
-        <div class="d-flex justify-content-center send-message mb-5">
-            <a class="btn btn-primary" href="{% url 'broadcastingMessageForm' %}">ADD NEW MESSAGE</a>
-        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
     {% endfor %}
-{% endblock content %}
-
+    {% endblock content %}
+    <script>
+    $(document).ready(function() {
+      $('.submit_on_enter').keydown(function(event) {
+        if (event.keyCode == 13) {
+            this.form.submit();
+            return false;
+        }
+      });
+    });
+    </script>
