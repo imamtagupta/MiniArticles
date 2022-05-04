@@ -1,0 +1,1 @@
+web: gunicorn MiniArticles.wsgi --log-file
